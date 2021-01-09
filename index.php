@@ -9,81 +9,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
-        #main {
-            background-color: bisque;
-            border-radius: 10px;
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            color: black;
-            padding: 5px;
-            align-content: center;
-        }
-
-        #forbuttons,
-        #forarticle {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        h2,
-        h3 {
+        h2,h3 {
             text-align: center;
         }
 
         #forbuttons div {
-            border: 1px solid gray;
-            margin: 3px;
-            padding: 8px;
             width: 150px;
-
         }
-
-        table,
-        tr,
-        td {
-            border: 1px solid gray;
-            margin: 3px;
-            padding: 8px;
-        }
-
-        table {
-            width: 100%;
-        }
-
         td:nth-child(even) {
             width: 70%;
         }
 
-        #article {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid black;
-            margin: 3px;
-            padding: 8px;
-            width: 45%;
-        }
     </style>
 </head>
 <body>
-<div id="main" class="container">
+<div id="main" class="container d-flex flex-column p-2 bg-info text-white w-50">
     <h2>All users:</h2>
-    <button class="btn-default" id="filt">Filter by Name</button>
-    <button class="btn-default" id="cancfilt" disabled>Cancel filter</button>
+    <button class="btn btn-light" id="filt">Filter by Name</button>
+    <button class="btn btn-light" id="cancfilt" disabled>Cancel filter</button>
 
-    <div id="forbuttons"></div>
+    <div id="forbuttons" class="container d-flex flex-row flex-wrap justify-content-between"></div>
 
     <h2>User info:</h2>
     <div id="fortable"></div>
     <br>
 
-    <input type="submit" value="Show posts"/>
+    <input type="submit" class="btn btn-light" value="Show posts"/>
     <br>
-    <div id="forarticle"></div>
+    <div id="forarticle" class="container d-flex flex-row flex-wrap justify-content-between"></div>
 
 </div>
 <script>
@@ -115,7 +68,8 @@
                     for (let i = 0; i < response.length; i++) {
                         let user = new Users(response[i].id, response[i].first_name, response[i].last_name, response[i].phone, response[i].email);
                         arrayUsers.push(user);
-                        $("#forbuttons").append(`<div id="${response[i].id}">` + response[i].first_name + " " + response[i].last_name + '</div>');
+                        $("#forbuttons").append(`<div class="container d-flex justify-content-center border border-secondary rounded p-2 m-2" data-toggle="tooltip" title="Click on me!" id="${response[i].id}">` + response[i].first_name + " " + response[i].last_name + '</div>');
+
                         $(document).on('click', `#${i + 1}`, function (e) {
                             //удалила предыдущую таблицу
                             $('table').remove();
@@ -127,8 +81,8 @@
                             $(this).css("font-weight", "bold");
 
                             //рисую таблицу
-                            let table = $('<table id="tab"/>');
-                            for (let i = 0; i < 4; i++) {
+                            let table = $('<table class="table table-dark table-hover w-100" id="tab"/>');
+                            for (let i = 0; i < 3; i++) {
                                 var row = $('<tr/>');
                                 for (let j = 0; j < 2; j++) {
                                     var cell = $('<td/>');
@@ -178,7 +132,7 @@
                         }
                         $('#forbuttons').empty();
                         results.forEach(function (item, i, arr) {
-                            $("#forbuttons").append(`<div id="${i}">` + item + '</div>');
+                            $("#forbuttons").append(`<div class="container d-flex justify-content-center border border-secondary rounded p-2 m-2"  data-toggle="tooltip" title="Click on me!"  id="${i}">` + item + '</div>');
                         });
                         $("#cancfilt").prop('disabled', false);
                         $("#filt").prop('disabled', true);
@@ -187,7 +141,7 @@
                     $("#cancfilt").click(function () {
                         $('#forbuttons').empty();
                         for (let i = 0; i < arrayUsers.length; i++) {
-                            $("#forbuttons").append(`<div id="${arrayUsers[i].id}">` + arrayUsers[i].name + " " + arrayUsers[i].surname + '</div>');
+                            $("#forbuttons").append(`<div class="container d-flex justify-content-center border border-secondary rounded p-2 m-2"  data-toggle="tooltip" title="Click on me!"  id="${arrayUsers[i].id}">` + arrayUsers[i].name + " " + arrayUsers[i].surname + '</div>');
                         }
                         $("#cancfilt").prop('disabled', true);
                         $("#filt").prop('disabled', false);
@@ -210,7 +164,7 @@
                             }
                             $("#more").remove();
                             for (let i = 0; i < data.length; i++) {
-                                let articlediv = $('<div id="article"/>');
+                                let articlediv = $('<div id="article" class="container d-flex flex-column justify-content-center border border-secondary rounded p-2 w-50"/>');
                                 let h4 = $('<h4/>');
                                 let p = $('<p/>');
                                 h4.html(data[i].title);
@@ -219,7 +173,7 @@
                                 articlediv.append(p);
                                 $("#forarticle").append(articlediv);
                             }
-                            let articlediv = $('<button class="btn-default" id="more">More posts</button>');
+                            let articlediv = $('<button class="btn btn-light" id="more">More posts</button>');
 
                             $("#main").append(articlediv);
                             $("#more").click(function () {
@@ -229,7 +183,7 @@
                                     $("#more").css("display", "none");
                                     console.log(data);
                                     for (let i = 0; i < data.length; i++) {
-                                        let articlediv = $('<div id="article"/>');
+                                        let articlediv = $('<div id="article" class="container d-flex flex-column justify-content-center border border-secondary rounded p-2 w-50"/>');
                                         let h4 = $('<h4/>');
                                         let p = $('<p/>');
                                         h4.html(data[i].title);
